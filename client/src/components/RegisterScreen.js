@@ -16,16 +16,24 @@ import Typography from '@mui/material/Typography';
 export default function RegisterScreen() {
     const { auth } = useContext(AuthContext);
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async function(event) {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
-        auth.registerUser(
+        const res = auth.registerUser(
             formData.get('firstName'),
             formData.get('lastName'),
             formData.get('email'),
             formData.get('password'),
             formData.get('passwordVerify')
-        );
+        ).then(() => {
+                // ONCE WE GET A RESPONSE FROM REGISTER USER, WE KNOW
+                // THAT WE CAN SWITCH TO THE HOME SCREEN
+                auth.loginUser(
+                    formData.get('email'),
+                    formData.get('password')
+                );
+            }
+        )
     };
 
     return (
