@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import AuthContext from '../auth'
 import Copyright from './Copyright'
 
@@ -12,31 +12,83 @@ import Link from '@mui/material/Link';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
+
+const alertStyle = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: '#1976d2',
+    boxShadow: 24,
+    p: 4,
+    color: '#FFFFFF'
+};
+
+const buttonStyle = {
+    position: 'absolute',
+    top: '-10%',
+    left: '85%',
+    width: 400,
+    p: 4,
+    color: '#FF0000',
+    width: '1%',
+    height: '1%',
+    fontSize: '24px',
+}
 
 export default function RegisterScreen() {
     const { auth } = useContext(AuthContext);
+    const [registerErrorModalIsActive, setModalIsActive] = useState(false);
+    const [errMsg, setErrMsg] = useState();
 
-    const handleSubmit = async function(event) {
+    const handleSubmit = async function (event) {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
-        const res = auth.registerUser(
+        auth.registerUser(
             formData.get('firstName'),
             formData.get('lastName'),
             formData.get('email'),
             formData.get('password'),
             formData.get('passwordVerify')
         ).then(() => {
-                // ONCE WE GET A RESPONSE FROM REGISTER USER, WE KNOW
-                // THAT WE CAN SWITCH TO THE HOME SCREEN
-                auth.loginUser(
-                    formData.get('email'),
-                    formData.get('password')
-                );
-            }
-        )
+            // ONCE WE GET A RESPONSE FROM REGISTER USER, WE KNOW
+            // THAT WE CAN SWITCH TO THE HOME SCREEN
+            auth.loginUser(
+                formData.get('email'),
+                formData.get('password')
+            );
+        }
+        ).catch((res) => {
+            // WHEN WE CATCH AN ERROR, WE NEED TO DISPLAY
+            // A POP UP MODAL
+            setModalIsActive(true);
+            setErrMsg(res.response.data.errorMessage);
+        })
     };
 
     return (
+        <>
+            {registerErrorModalIsActive &&
+                <Modal
+                    open={true}
+                    onClose={() => { setModalIsActive(false) }}
+                >
+                    <Alert severity="warning" sx={alertStyle}>
+                        <Button
+                            sx={buttonStyle}
+                            onClick={() => { setModalIsActive(false) }}
+                        >
+                            ⊗
+                        </Button>
+                        <AlertTitle>Warning</AlertTitle>
+                      { `Could not register with the provided information. ${errMsg}`}
+                    </Alert>
+                </Modal>
+            }
             <Container component="main" maxWidth="xs">
                 <CssBaseline />
                 <Box
@@ -128,5 +180,6 @@ export default function RegisterScreen() {
                 </Box>
                 <Copyright sx={{ mt: 5 }} />
             </Container>
+        </>
     );
 }
