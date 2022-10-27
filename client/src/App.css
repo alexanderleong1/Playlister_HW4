@@ -125,11 +125,15 @@ body {
   font-size: 36pt;
 }
 
+.menu-button {
+  z-index: 1;
+}
+
 #list-selector-heading {
   position: absolute;
-  left: 0%;
+  left: 25%;
   top: 0%;
-  width: 100%;
+  width: 50%;
   height: 10%;
   text-align: center;
   font-size: 24pt;
@@ -137,6 +141,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index:0;
 }
 
 #add-list-button {

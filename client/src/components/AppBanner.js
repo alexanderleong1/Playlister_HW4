@@ -69,6 +69,7 @@ export default function AppBanner() {
             }}
             open={isMenuOpen}
             onClose={handleMenuClose}
+            className="menu-button"
         >
             <MenuItem onClick={handleLogout}>Logout</MenuItem>
         </Menu>        
