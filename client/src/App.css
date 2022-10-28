@@ -335,6 +335,34 @@ input {
   width: 20%;
 }
 
+.modal-north {
+  font-size: 24pt;
+  position: absolute;
+  top: 5%;
+}
+
+.modal-south {
+  text-align:center;
+  position: sticky;
+  bottom: 0%;
+  margin-top: 32px;
+}
+
+#edit-song-modal-content {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-template-rows: 33% 33% 33%;
+}
+
+.modal-prompt {
+  font-size: 18pt;
+  margin: 2px;
+}
+
+.modal-textfield {
+  margin: 2px;
+}
+
 .dialog-header {
   font-size: 24pt;
 }
