@@ -346,6 +346,14 @@ input {
   text-align: center;
 }
 
+#playlister-statusbar {
+  text-align: center;
+  position: sticky;
+  bottom: 0px;
+  background: #1976d2;
+  width: 100%;
+}
+
 /* ANIMATIONS
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 [data-animation] .modal-dialog {
