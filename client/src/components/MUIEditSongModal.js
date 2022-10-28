@@ -51,7 +51,7 @@ export default function MUIEditSongModal() {
 
     return (
         <Modal
-            open={store.currentSong !== null}
+            open={store.currentSong !== null && store.currentModal === "EDIT_SONG"}
         >
             <Box sx={style}>
             <div
