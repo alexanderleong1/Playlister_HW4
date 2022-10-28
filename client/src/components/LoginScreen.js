@@ -37,10 +37,11 @@ const buttonStyle = {
     left: '85%',
     width: 400,
     p: 4,
-    color: '#FF0000',
+    color: '#FFFFFF',
     width: '1%',
     height: '1%',
     fontSize: '24px',
+    fontWeight: 'bold'
 }
 
 export default function LoginScreen() {
@@ -77,7 +78,7 @@ export default function LoginScreen() {
                             sx={buttonStyle}
                             onClick={() => {setModalIsActive(false)}}
                         >
-                                ⊗
+                                ✖
                         </Button>
                         <AlertTitle>Warning</AlertTitle>
                         Could not log in with the provided information.
