@@ -30,7 +30,7 @@ function WorkspaceScreen() {
             sx={{ width: '100%', bgcolor: 'background.paper' }}
         >
             {
-                store.currentList.songs.map((song, index) => (
+                store.currentList && store.currentList.songs.map((song, index) => (
                     <SongCard
                         id={'playlist-song-' + (index)}
                         key={'playlist-song-' + (index)}

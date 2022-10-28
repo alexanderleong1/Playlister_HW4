@@ -258,6 +258,8 @@ function GlobalStoreContextProvider(props) {
             payload: {}
         });
         tps.clearAllTransactions();
+        // AND THEN CHANGE THE LINK TO THE HOME PAGE
+        history.goBack();
     }
 
     // THIS FUNCTION CREATES A NEW LIST
