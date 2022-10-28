@@ -26,6 +26,7 @@ export const GlobalStoreActionType = {
     CREATE_NEW_LIST: "CREATE_NEW_LIST",
     LOAD_ID_NAME_PAIRS: "LOAD_ID_NAME_PAIRS",
     MARK_LIST_FOR_DELETION: "MARK_LIST_FOR_DELETION",
+    UNMARK_LIST_FOR_DELETION: "UNMARK_LIST_FOR_DELETION",
     SET_CURRENT_LIST: "SET_CURRENT_LIST",
     SET_LIST_NAME_EDIT_ACTIVE: "SET_LIST_NAME_EDIT_ACTIVE",
     EDIT_SONG: "EDIT_SONG",
@@ -139,6 +140,20 @@ function GlobalStoreContextProvider(props) {
                     listNameActive: false,
                     listIdMarkedForDeletion: payload.id,
                     listMarkedForDeletion: payload.playlist
+                });
+            }
+            // UNMARK THE LIST FOR DELETION
+            case GlobalStoreActionType.MARK_LIST_FOR_DELETION: {
+                return setStore({
+                    currentModal : CurrentModal.NONE,
+                    idNamePairs: store.idNamePairs,
+                    currentList: null,
+                    currentSongIndex: -1,
+                    currentSong: null,
+                    newListCounter: store.newListCounter,
+                    listNameActive: false,
+                    listIdMarkedForDeletion: null,
+                    listMarkedForDeletion: null
                 });
             }
             // UPDATE A LIST
@@ -327,12 +342,26 @@ function GlobalStoreContextProvider(props) {
                 history.push("/");
             }
         }
-        processDelete(id);
+        processDelete(id)
+            .then(() => {
+                // AFTER DELETING THE LIST, WE HAVE TO
+                // UPDATE THE VIEW
+                store.loadIdNamePairs();
+            });
     }
     store.deleteMarkedList = function() {
         store.deleteList(store.listIdMarkedForDeletion);
         store.hideModals();
     }
+    store.unmarkListForDeletion = function() {
+        // RESET THE MARKED LIST FOR DELETION AND CLOSE THE MODAL
+        storeReducer({
+            type: GlobalStoreActionType.UNMARK_LIST_FOR_DELETION,
+            payload: {}   
+        })
+        store.hideModals();
+    };
+
     // THIS FUNCTION SHOWS THE MODAL FOR PROMPTING THE USER
     // TO SEE IF THEY REALLY WANT TO DELETE THE LIST
 
