@@ -233,6 +233,11 @@ function GlobalStoreContextProvider(props) {
     // DRIVE THE STATE OF THE APPLICATION. WE'LL CALL THESE IN 
     // RESPONSE TO EVENTS INSIDE OUR COMPONENTS.
 
+    // CLEAR THE STORE TRANSACTION WHEN WE CLICK ON THE
+    // HOME BUTTON.
+    store.clearTransactions = function() {
+        tps.clearAllTransactions();
+    }
     // THIS FUNCTION PROCESSES CHANGING A LIST NAME
     store.changeListName = function (id, newName) {
         // GET THE LIST
