@@ -1,6 +1,10 @@
 import React, { useContext, useState } from 'react'
 import { GlobalStoreContext } from '../store'
 
+const CurrentModal = {
+    NONE : "NONE"
+}
+
 function SongCard(props) {
     const { store } = useContext(GlobalStoreContext);
     const [ draggedTo, setDraggedTo ] = useState(0);
@@ -68,6 +72,7 @@ function SongCard(props) {
             </a>
             <input
                 type="button"
+                disabled={store.currentModal !== CurrentModal.NONE}
                 id={"remove-song-" + index}
                 className="list-card-button"
                 value={"\u2715"}
