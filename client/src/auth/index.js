@@ -85,7 +85,7 @@ function AuthContextProvider(props) {
                     user: response.data.user
                 }
             })
-            history.push("/login");
+            // history.push("/login");
         }
     }
 
