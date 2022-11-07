@@ -60,19 +60,13 @@ function WorkspaceScreen() {
     }
 
     // SET THE APPROPRIATE VALUE FOR LISTACCESSMODALISACTIVE
+    // THIS VALIDATES THAT ONLY THE USERS OWNED LISTS WILL BE SHOWN
+    // AND THAT WE ARE NOT ACCESSING SOMEONE ELSES LISTS
     if (!store.currentList && !listAccessModalIsActive) {
         setModalIsActive(true);
     } else if (store.currentList && listAccessModalIsActive) {
         setModalIsActive(false);
     }
-
-    // if (!store.currentList) {
-    //     store.boolSetCurrentList(window.location.href.split('/')[window.location.href.split('/').length - 1])
-    //         .then(() => {
-    //             if (!store.currentList) setModalIsActive(true);
-    //             console.log(store.currentList);
-    //         })
-    // }
 
     return (
         <>
