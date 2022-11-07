@@ -31,7 +31,8 @@ export const GlobalStoreActionType = {
     SET_LIST_NAME_EDIT_ACTIVE: "SET_LIST_NAME_EDIT_ACTIVE",
     EDIT_SONG: "EDIT_SONG",
     REMOVE_SONG: "REMOVE_SONG",
-    HIDE_MODALS: "HIDE_MODALS"
+    HIDE_MODALS: "HIDE_MODALS",
+    CLEAR_CURRENT_LIST: "CLEAR_CURRENT_LIST"
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -224,6 +225,19 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null
                 });
             }
+            case GlobalStoreActionType.CLEAR_CURRENT_LIST: {
+                return setStore({
+                    currentModal : CurrentModal.NONE,
+                    idNamePairs: store.idNamePairs,
+                    currentList: null,
+                    currentSongIndex: -1,
+                    currentSong: null,
+                    newListCounter: store.newListCounter,
+                    listNameActive: false,
+                    listIdMarkedForDeletion: null,
+                    listMarkedForDeletion: null
+                })
+            }
             default:
                 return store;
         }
@@ -280,6 +294,13 @@ function GlobalStoreContextProvider(props) {
         tps.clearAllTransactions();
         // AND THEN CHANGE THE LINK TO THE HOME PAGE
         history.goBack();
+    }
+
+    store.clearCurrentList = function() {
+        storeReducer({
+            type: GlobalStoreActionType.CLEAR_CURRENT_LIST,
+            payload: {}
+        });
     }
 
     // THIS FUNCTION CREATES A NEW LIST
@@ -404,6 +425,8 @@ function GlobalStoreContextProvider(props) {
     // moveItem, updateItem, updateCurrentList, undo, and redo
     store.setCurrentList = function (id) {
         async function asyncSetCurrentList(id) {
+            // IF WE RECEIVE A 400 FROM GETPLAYLISTBYID, THEN WE KNOW
+            // THAT THE USER DOES NOT HAVE PERMISSION TO VIEW THE LIST
             let response = await api.getPlaylistById(id);
             if (response.data.success) {
                 let playlist = response.data.playlist;
@@ -415,10 +438,31 @@ function GlobalStoreContextProvider(props) {
                         payload: playlist
                     });
                     history.push("/playlist/" + playlist._id);
-                }
-            }
+                } 
+            } 
         }
         asyncSetCurrentList(id);
+    }
+
+    store.boolSetCurrentList = async function (id) {
+        async function asyncSetCurrentList(id) {
+            // IF WE RECEIVE A 400 FROM GETPLAYLISTBYID, THEN WE KNOW
+            // THAT THE USER DOES NOT HAVE PERMISSION TO VIEW THE LIST
+            let response = await api.getPlaylistById(id);
+            if (response.data.success) {
+                let playlist = response.data.playlist;
+
+                response = await api.updatePlaylistById(playlist._id, playlist);
+                if (response.data.success) {
+                    storeReducer({
+                        type: GlobalStoreActionType.SET_CURRENT_LIST,
+                        payload: playlist
+                    });
+                    history.push("/playlist/" + playlist._id);
+                } 
+            }
+        }
+        await asyncSetCurrentList(id);
     }
 
     store.getPlaylistSize = function() {
